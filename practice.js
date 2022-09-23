@@ -25,7 +25,13 @@ var moreFruits = function (fruits) {
 // use _.each to traverse the number array and determine
 // which are multiples of five.
 var multiplesOfFive = function (numbers) {
-
+  var count = 0;
+  _.each(numbers, function(num) {
+    if (num % 5 === 0) {
+      count++;
+    }
+  });
+  return count;
 };
 
 // use _.each to build an array containing only tweets belonging to a specified user.
@@ -41,18 +47,24 @@ var getUserTweets = function(tweets, user) {
 
 // use _.filter to return the fruits array with only the desired fruit.
 var onlyOneFruit = function (fruits, targetFruit) {
-
+  return _.filter(fruits, function(element) {
+    return element === targetFruit;
+  });
 };
 
 // use _.filter to return the fruits array with only fruits
 // starting with the letter 'P'.
 var startsWith = function (fruits, letter) {
-
+  return _.filter(fruits, function(element) {
+    return element[0] === letter;
+  });
 };
 
 // return a filtered array containing only cookie-type desserts.
 var cookiesOnly = function (desserts) {
-
+  return _.filter(desserts, function(element) {
+    return element.type === 'cookie';
+  });
 };
 
 // rebuild the getUserTweets function from above with _.filter instead
@@ -69,13 +81,19 @@ var filterUserTweets = function(tweets, user) {
 // given an array of strings, use _.map to return a new array containing all
 // strings converted to uppercase letters.
 var upperCaseFruits = function (fruits) {
-
+  return _.map(fruits, function(element) {
+    return element.toUpperCase();
+  });
 };
 
 // given an array of dessert objects, return a new array of objects
 // that have a new "glutenFree" property, with a boolean value.
 // TIP: Items that contain flour are not gluten-free.
 var glutenFree = function (desserts) {
+  return _.map(desserts, function(element) {
+    element.ingredients.includes('flour') ? element.glutenFree = false : element.glutenFree = false;
+    return element;
+  });
 
 };
 
@@ -106,7 +124,10 @@ var allUserMessages = function(tweets) {
 
 */
 var applyCoupon = function (groceries, coupon) {
-
+  return _.map(groceries, function(item) {
+    item.salePrice = '$' + (parseFloat(item.price.slice(1)) * (1 - coupon)).toFixed(2);
+    return item;
+  });
 };
 
 /*
@@ -117,13 +138,20 @@ var applyCoupon = function (groceries, coupon) {
 
 // return the total price of all products.
 var sumTotal = function (products) {
-
+  return _.reduce(products, function(total, item) {
+    var price = parseFloat(item.price.slice(1));
+    total += price;
+    return total;
+  }, 0);
 };
 
 // return an object consisting of dessert types and how many of each.
 // exampleOutput: { dessertType: 3, dessertType2: 1 }
 var dessertCategories = function (desserts) {
-
+  return _.reduce(desserts, function(typeCount, element) {
+    typeCount[element.type] === undefined ? typeCount[element.type] = 1 : typeCount[element.type]++;
+    return typeCount;
+  }, {});
 };
 
 // return an object with the proper count of all user messages
@@ -138,19 +166,30 @@ var dessertCategories = function (desserts) {
   }
 */
 var countMessagesPerUser = function(tweets) {
-
+  return _.reduce(tweets, function(messageCount, message) {
+    messageCount[message.user] === undefined ? messageCount[message.user] = 1 
+    : messageCount[message.user]++;
+    return messageCount;
+  }, {});
 };
 
 // given an array of movie data objects,return an array containing
 // movies that came out between 1990 and 2000.
 // TIP: use an array as your accumulator - don't push to an external array!
 var ninetiesKid = function (movies) {
-
+  return _.reduce(movies, function(array, movie) {
+    if (movie.releaseYear >= 1990 && movie.releaseYear < 2000) {
+      array.push(movie.title);
+    }
+    return array; 
+  }, []);
 };
 
 // return an boolean stating if there exists a movie with a shorter
 // runtime than your time limit.
 // timeLimit is an integer representing a number of minutes.
 var movieNight = function (movies, timeLimit) {
-
+  return _.reduce(movies, function(watch, movie) {
+    return movie.runtime < timeLimit ? watch = true : watch;
+  }, false);
 };
